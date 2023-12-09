@@ -135,4 +135,114 @@ $VAR1 = [
         ];
 ```
 
+```shell
+❯ bun run parse.ts
+{
+  kind: "Document",
+  definitions: [
+    {
+      kind: "ObjectTypeDefinition",
+      description: undefined,
+      name: [Object ...],
+      interfaces: [],
+      directives: [],
+      fields: [
+        [Object ...]
+      ],
+      loc: [Location ...],
+    }
+  ],
+  loc: Location {
+    start: 0,
+    end: 28,
+    startToken: Token {
+      kind: "<SOF>",
+      start: 0,
+      end: 0,
+      line: 0,
+      column: 0,
+      value: undefined,
+      prev: null,
+      next: [Token ...],
+      toJSON: [Function: toJSON],
+    },
+    endToken: Token {
+      kind: "<EOF>",
+      start: 28,
+      end: 28,
+      line: 1,
+      column: 29,
+      value: undefined,
+      prev: [Token ...],
+      next: null,
+      toJSON: [Function: toJSON],
+    },
+    source: Source {
+      body: "type Query { hello: String }",
+      name: "GraphQL request",
+      locationOffset: [Object ...],
+    },
+    toJSON: [Function: toJSON],
+  },
+}
+```
 
+#          'loc' => {
+#                     'start' => 0,
+#                     'end' => 28
+#                   },
+#          'kind' => 'Document',
+#          'definitions' => [
+#                             {
+#                               'directives' => [],
+#                               'fields' => [
+#                                             {
+#                                               'loc' => {
+#                                                          'end' => 26,
+#                                                          'start' => 13
+#                                                        },
+#                                               'kind' => 'FieldDefinition',
+#                                               'arguments' => [],
+#                                               'type' => {
+#                                                           'kind' => 'NamedType',
+#                                                           'name' => {
+#                                                                       'loc' => {
+#                                                                                  'end' => 26,
+#                                                                                  'start' => 20
+#                                                                                },
+#                                                                       'kind' => 'Name',
+#                                                                       'value' => 'String'
+#                                                                     },
+#                                                           'loc' => {
+#                                                                      'end' => 26,
+#                                                                      'start' => 20
+#                                                                    }
+#                                                         },
+#                                               'directives' => [],
+#                                               'name' => {
+#                                                           'loc' => {
+#                                                                      'end' => 18,
+#                                                                      'start' => 13
+#                                                                    },
+#                                                           'kind' => 'Name',
+#                                                           'value' => 'hello'
+#                                                         }
+#                                             }
+#                                           ],
+#                               'name' => {
+#                                           'loc' => {
+#                                                      'start' => 5,
+#                                                      'end' => 10
+#                                                    },
+#                                           'value' => 'Query',
+#                                           'kind' => 'Name'
+#                                         },
+#                               'kind' => 'ObjectTypeDefinition',
+#                               'interfaces' => [],
+#                               'loc' => {
+#                                          'end' => 28,
+#                                          'start' => 0
+#                                        }
+#                             }
+#                           ]
+#        };
