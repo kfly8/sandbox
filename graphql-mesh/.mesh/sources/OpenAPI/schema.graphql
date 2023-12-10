@@ -1,0 +1,47 @@
+schema {
+  query: Query
+}
+
+directive @globalOptions(sourceName: String, endpoint: String, operationHeaders: ObjMap, queryStringOptions: ObjMap, queryParams: ObjMap) on OBJECT
+
+directive @httpOperation(path: String, operationSpecificHeaders: ObjMap, httpMethod: HTTPMethod, isBinary: Boolean, requestBaseBody: ObjMap, queryParamArgMap: ObjMap, queryStringOptionsByParam: ObjMap) on FIELD_DEFINITION
+
+type Query @globalOptions(sourceName: "OpenAPI", endpoint: "http://localhost:3000") {
+  "List all books"
+  listBooks: [Book] @httpOperation(path: "/books", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET)
+  "Get a book by ID"
+  getBookById(
+    "Unique identifier of the book"
+    bookId: String!
+  ): Book @httpOperation(path: "/books/{args.bookId}", operationSpecificHeaders: "{\"accept\":\"application/json\"}", httpMethod: GET)
+}
+
+type Book {
+  "Unique identifier of the book"
+  id: String!
+  "Title of the book"
+  title: String!
+  "Author of the book"
+  author: String
+  "ISBN of the book"
+  isbn: String
+  "Date when the book was published"
+  publishedDate: Date
+}
+
+"Represents date values"
+scalar Date
+
+scalar ObjMap
+
+enum HTTPMethod {
+  GET
+  HEAD
+  POST
+  PUT
+  DELETE
+  CONNECT
+  OPTIONS
+  TRACE
+  PATCH
+}
