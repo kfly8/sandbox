@@ -1,0 +1,7 @@
+requires 'Net::Async::HTTP::Server';
+requires 'IO::Async';
+requires 'Plack';
+requires 'Starlet';
+
+requires 'IO::Async::Loop::EV';
+requires 'IO::Async::Loop::UV';
