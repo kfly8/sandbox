@@ -2,6 +2,9 @@ requires 'Net::Async::HTTP::Server';
 requires 'IO::Async';
 requires 'Plack';
 requires 'Starlet';
+requires 'Data::ULID';
+requires 'Future::AsyncAwait';
+requires 'Log::Minimal';
 
 requires 'IO::Async::Loop::EV';
 requires 'IO::Async::Loop::UV';
