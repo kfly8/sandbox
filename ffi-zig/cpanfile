@@ -1,1 +1,2 @@
 requires 'FFI::Platypus';
+requires 'FFI::Platypus::Lang::Zig';
