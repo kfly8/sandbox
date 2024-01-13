@@ -433,3 +433,57 @@ test "comptime block" {
     };
     try expectEqual(y, 55);
 }
+
+// --------------------------------------
+// Payload Captures
+// --------------------------------------
+
+test "optional-if" {
+    var maybe_num: ?usize = 10;
+    if (maybe_num) |num| {
+        try expect(@TypeOf(num) == usize);
+        try expectEqual(num, 10);
+    } else {
+        unreachable;
+    }
+}
+
+test "error union if" {
+    var ent_num: error{UnknownEntity}!u32 = 5;
+    if (ent_num) |num| {
+        try expectEqual(num, 5);
+        try expectEqual(@TypeOf(num), u32);
+    } else |err| {
+        try expectEqual(err, error.UnknownEntity);
+        unreachable;
+    }
+}
+
+test "while optional" {
+    var i: ?u32 = 10;
+    while (i) |num| : (i.? -= 1) {
+        try expect(@TypeOf(num) == u32);
+        if (num == 1) {
+            i = null;
+            break;
+        }
+    }
+    try expect(i == null);
+}
+
+// --------------------------------------
+// Anonymous Structs
+// --------------------------------------
+test "anonymous struct literal" {
+    const Point = struct {
+        x: f32,
+        y: f32,
+    };
+
+    var v: Point = .{
+        .x = 1.0,
+        .y = 2.0,
+    };
+    try expectEqual(v.x, 1.0);
+    try expectEqual(v.y, 2.0);
+}
