@@ -2,3 +2,5 @@ requires 'Test2::V0';
 requires 'Object::Pad';
 requires 'Type::Tiny';
 requires 'Data::Lock';
+requires 'Data::Printer';
+requires 'Devel::StrictMode';
