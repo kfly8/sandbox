@@ -4,8 +4,10 @@ use v5.38;
 use Data::Lock qw(dlock);
 use Types::Standard -types;
 use Type::Tie;
-use Devel::StrictMode;
+#use Devel::StrictMode;
 use Carp qw(croak);
+
+use constant STRICT => 1;
 
 sub import {
     my ($class, $func_name, $type) = @_;
@@ -24,23 +26,72 @@ sub import {
     my $is_hash = $type->is_a_type_of(HashRef);
     my $is_array = $type->is_a_type_of(ArrayRef);
 
-    no strict qw(refs);
-    *{"${target}::${func_name}"} = sub :prototype(;@) {
-        return $type unless @_;
+    my $code = $is_hash ? sub {
+        my $data = { @_ };
+        if (STRICT) {
+            croak $type->get_message($data) unless $type->check($data);
+            dlock $data;
+        }
+        return $data;
+    } : $is_array ? sub {
+        ...
+    } : sub {
+        ...
+    };
 
-        if ($is_hash) {
-            my %args = @_;
-            if (STRICT) {
-                croak $type->get_message(\%args) unless $type->check(\%args);
-                dlock \%args;
-            }
-            return \%args;
-        }
-        elsif ($is_array) {
-        }
-        else {
-        }
+    my $object = sub {
+        my $result = $code->(@_);
+        bless +{ %$result }, 'hoge::Prototype';
+    };
+
+    no strict qw(refs);
+    *{"${target}::${func_name}"} = $code;
+    *{"${target}::${func_name}::type"} = sub () { $type };
+    *{"${target}::${func_name}::inline_object"} = $object;
+    *{"${target}::${func_name}::inline_object_type"} = sub () {
+        state $t = Type::Tiny->new(
+            display_name => "InstanceOf[hoge::Prototype] + $type",
+            constraint => sub {
+                return unless (InstanceOf['hoge::Prototype'])->check($_);
+                return unless $type->check(+{ %$_ });
+                return 1;
+            },
+            get_message => sub {
+                return "xxxx" unless InstanceOf['hoge::Prototype']->check($_);
+                return "yyyy" unless $type->check(+{ %$_ });
+                return;
+            },
+        );
+        $t;
     };
 }
+
+package hoge::Prototype;
+
+our $AUTOLOAD;
+sub can {
+    return $_[0]->{$_[1]} if Scalar::Util::blessed($_[0]);
+    goto &UNIVERSAL::can;
+}
+
+sub to_hash {
+    my $self = shift;
+    +{ %$self };
+}
+
+sub AUTOLOAD {
+    my $self = shift;
+    my $attr = $AUTOLOAD;
+    $attr =~ s/.*://;
+
+    if (exists $self->{$attr}) {
+        return $self->{$attr};
+    }
+    else {
+        ...
+    }
+}
+
+sub DESTROY { }
 
 1;
