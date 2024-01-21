@@ -3,54 +3,74 @@ use Test2::V0;
 use lib 'lib';
 
 use Types::Standard -types;
+use Type::Utils qw(compile_match_on_type);
 
-# TODO: What name is better than `hoge`??
-use hoge Lang => Dict[
-    name => Str,
-    year => Optional[Int],
+use caseval Manga => Dict[
+    title => Str,
+    author => Str,
 ];
 
-subtest 'Lang builds immutable hashref' => sub {
-    my $perl = Lang(name => 'Perl', year => 1987);
-    is $perl->{name}, 'Perl';
-    is $perl, {
-        name => 'Perl',
-        year => 1987,
+use caseval Magazine => Dict[
+    title => Str,
+    year => Int,
+];
+
+subtest 'Manga, Magazine isa Type::Tiny' => sub {
+    is Manga, object {
+        prop blessed => 'Type::Tiny';
+        call display_name => 'Dict[author=>Str,title=>Str]';
     };
 
-    # check only when StrictMode is enabled
-    ok dies { $perl->{aaaa}; };
-    ok dies { $perl->{name} = 'Python'; };
-    ok dies { Lang(year => '1982'); };
-
-    # write to hashref
-    my $perl7 = Lang(%$perl, name => 'Perl7');
-    is $perl7->{name}, 'Perl7';
-};
-
-subtest 'Lang::type returns Type::Tiny object' => sub {
-    isa_ok Lang::type, 'Type::Tiny';
-    is Lang::type, 'Dict[name=>Str,year=>Optional[Int]]';
-};
-
-subtest 'Lang::inline_object builds inline object' => sub {
-    my $perl = Lang::inline_object(name => 'Perl', year => 1987);
-    is $perl->name, 'Perl';
-    is $perl, object {
-        prop blessed => 'hoge::Prototype';
-        call name => 'Perl';
-        call year => 1987;
-    };
-
-    is $perl->to_hash, {
-        name => 'Perl',
-        year => 1987,
+    is Magazine, object {
+        prop blessed => 'Type::Tiny';
+        call display_name => 'Dict[title=>Str,year=>Int]';
     };
 };
 
-subtest 'Lang::inline_object_type returns Type::Tiny object' => sub {
-    isa_ok Lang::inline_object_type, 'Type::Tiny';
-    is Lang::inline_object_type, 'InstanceOf[hoge::Prototype] + Dict[name=>Str,year=>Optional[Int]]';
+subtest 'Manga::val, Magazine::val build immutable hashrefs' => sub {
+    my $naruto = Manga::val(title => 'Naruto', author => 'Masashi Kishimoto');
+    is $naruto, {
+        title => 'Naruto',
+        author => 'Masashi Kishimoto',
+    };
+
+    my $jump = Magazine::val(title => 'Weekly Shonen Jump', year => 1968);
+    is $jump, {
+        title => 'Weekly Shonen Jump',
+        year => 1968,
+    };
+
+    # When StrictMode is enabled, the following code will die.
+    ok dies { $naruto->{aaaa}; };
+    ok dies { $jump->{title} = 'Sunday'; };
+    ok dies { Manga::val(title => '...'); };
+
+    # Modify hashref
+    my $boruto = Manga::val(%$naruto, title => 'Boruto');
+    is $boruto->{title}, 'Boruto';
+};
+
+subtest 'Pattern Match' => sub {
+
+    my sub hello($pub) {
+        my $code = compile_match_on_type(
+            Manga, sub {
+                my $manga = shift;
+                return "Hello, $manga->{title} by $manga->{author}";
+            },
+            Magazine, sub {
+                my $magazine = shift;
+                return "Hello, $magazine->{title} ($magazine->{year})";
+            },
+        );
+        $code->($pub);
+    }
+
+    is hello(Manga::val(title => 'Hunter x Hunter', author => 'Yoshihiro Togashi')),
+        'Hello, Hunter x Hunter by Yoshihiro Togashi';
+
+    is hello(Magazine::val(title => 'Time', year => 1923)),
+        'Hello, Time (1923)';
 };
 
 done_testing

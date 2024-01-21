@@ -1,4 +1,4 @@
-package hoge;
+package caseval;
 use v5.38;
 
 use Data::Lock qw(dlock);
@@ -45,25 +45,9 @@ sub import {
     };
 
     no strict qw(refs);
-    *{"${target}::${func_name}"} = $code;
-    *{"${target}::${func_name}::type"} = sub () { $type };
-    *{"${target}::${func_name}::inline_object"} = $object;
-    *{"${target}::${func_name}::inline_object_type"} = sub () {
-        state $t = Type::Tiny->new(
-            display_name => "InstanceOf[hoge::Prototype] + $type",
-            constraint => sub {
-                return unless (InstanceOf['hoge::Prototype'])->check($_);
-                return unless $type->check(+{ %$_ });
-                return 1;
-            },
-            get_message => sub {
-                return "xxxx" unless InstanceOf['hoge::Prototype']->check($_);
-                return "yyyy" unless $type->check(+{ %$_ });
-                return;
-            },
-        );
-        $t;
-    };
+    *{"${target}::${func_name}"} = sub () { $type };
+    *{"${target}::${func_name}::val"} = $code;
+    *{"${target}::${func_name}::"} = $code;
 }
 
 package hoge::Prototype;
