@@ -2,8 +2,8 @@
   "title": "Example/Button",
   "parameters": {
     "server": {
-      "url": "https://storybook-server-demo.netlify.app/api",
-      "id": "button"
+      "url": "http://localhost:3000/api/components",
+      "id": "Button"
     }
   },
   "args": { "label": "Button" },
