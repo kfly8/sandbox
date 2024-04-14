@@ -1,18 +1,20 @@
 import { css } from 'hono/css'
 
-type Props = {
-  size: 'large' | 'small'
-  label: string
+interface ButtonProps {
+  primary?: boolean;
+  backgroundColor?: string;
+  size?: 'small' | 'medium' | 'large';
+  label: string;
+  onClick?: () => void;
 }
 
-export const createButtonProps = (params: URLSearchParams) : Props => {
-  return {
-    size: params.get('size') as Props['size'],
-    label: params.get('label') as Props['label'],
-  }
-}
-
-export const Button = (props : Props) => {
+export const Button = ({
+  primary = false,
+  size = 'medium',
+  backgroundColor,
+  label,
+  ...props
+} : ButtonProps) => {
 
   const buttonBaseClass = css`
     padding: 10px 20px;
@@ -20,14 +22,15 @@ export const Button = (props : Props) => {
 
   const buttonSize = {
     large: css`font-size: 20px;`,
+    medium: css`font-size: 16px;`,
     small: css`font-size: 12px;`,
   }
 
-  const buttonClass = css`${buttonBaseClass} ${buttonSize[props.size]}`
+  const buttonClass = css`${buttonBaseClass} ${buttonSize[size]}`
 
   return (
     <>
-      <button class={buttonClass}>{props.label}</button>
+      <button class={buttonClass} {...props}>{label}</button>
     </>
   );
 }
