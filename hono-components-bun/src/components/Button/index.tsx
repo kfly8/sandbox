@@ -1,17 +1,19 @@
 import { css } from 'hono/css'
 
-interface ButtonProps {
-  primary?: boolean;
-  backgroundColor?: string;
+export type ButtonProps = {
   size?: 'small' | 'medium' | 'large';
   label: string;
-  onClick?: () => void;
+}
+
+export const createButtonProps = (params: URLSearchParams) : ButtonProps => {
+  return {
+    size: params.get('size') as ButtonProps['size'],
+    label: params.get('label') as ButtonProps['label'],
+  }
 }
 
 export const Button = ({
-  primary = false,
   size = 'medium',
-  backgroundColor,
   label,
   ...props
 } : ButtonProps) => {
