@@ -1,0 +1,2 @@
+requires 'JSON::MaybeXS', '== 1.004000';
+requires 'JSON::XS';
