@@ -1,0 +1,21 @@
+{
+  "name": "sample-graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "devDependencies": {
+    "@apollo/server": "^4.10.4",
+    "@types/node": "^20.14.4",
+    "graphql": "^16.8.2",
+    "typescript": "^5.4.5"
+  }
+}
