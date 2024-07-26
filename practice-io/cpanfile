@@ -1,0 +1,5 @@
+requires 'IO::Async';
+requires 'Future::AsyncAwait';
+
+requires 'Net::Async::HTTP::Server';
+
