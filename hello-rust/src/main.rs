@@ -20,26 +20,20 @@ fn main() {
     else {
         println!("Error: Division by zero!");
     }
+
+    let result = mul(10, 2);
+    println!("Result: {result}");
 }
 
 /// Safely divide two numbers.
-///
-/// Arguments
-/// `x` - The dividend.
-/// `y` - The divisor.
-///
-/// Returns
-/// The result of the division if `y` is not zero.
-/// Otherwise, an error message.
-///
-/// Example
-/// ```
-/// let result = safediv(10, 2);
-/// assert_eq!(result, Ok(5));
-/// ```
 fn safediv(x: i32, y: i32) -> Result<i32, String> {
     if y == 0 {
         return Err(String::from("Division by zero!"));
     }
     Ok(x/y)
+}
+
+
+fn mul(x: i32, y: i32) -> i32 {
+    x * y
 }
