@@ -2,4 +2,6 @@ requires 'IO::Async';
 requires 'Future::AsyncAwait';
 
 requires 'Net::Async::HTTP::Server';
+requires 'Future::IO';
+requires 'Parallel::Prefork';
 

@@ -1,5 +1,11 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
+  Class-Accessor-Lite-0.08
+    pathname: K/KA/KAZUHO/Class-Accessor-Lite-0.08.tar.gz
+    provides:
+      Class::Accessor::Lite 0.08
+    requirements:
+      ExtUtils::MakeMaker 6.36
   Class-Inspector-1.36
     pathname: P/PL/PLICEASE/Class-Inspector-1.36.tar.gz
     provides:
@@ -25,6 +31,14 @@ DISTRIBUTIONS
       Encode::Alias 0
       ExtUtils::MakeMaker 0
       perl 5.008
+  Exporter-Tiny-1.006002
+    pathname: T/TO/TOBYINK/Exporter-Tiny-1.006002.tar.gz
+    provides:
+      Exporter::Shiny 1.006002
+      Exporter::Tiny 1.006002
+    requirements:
+      ExtUtils::MakeMaker 6.17
+      perl 5.006001
   ExtUtils-CChecker-0.12
     pathname: P/PE/PEVANS/ExtUtils-CChecker-0.12.tar.gz
     provides:
@@ -90,6 +104,18 @@ DISTRIBUTIONS
       XS::Parse::Sublike 0.14
       XS::Parse::Sublike::Builder 0.14
       perl 5.016
+  Future-IO-0.15
+    pathname: P/PE/PEVANS/Future-IO-0.15.tar.gz
+    provides:
+      Future::IO 0.15
+      Future::IO::ImplBase 0.15
+      Future::IO::System 0.15
+    requirements:
+      Future 0
+      Module::Build 0.4004
+      Struct::Dumb 0
+      Time::HiRes 0
+      perl 5.014
   HTTP-Date-6.06
     pathname: O/OA/OALDERS/HTTP-Date-6.06.tar.gz
     provides:
@@ -202,6 +228,12 @@ DISTRIBUTIONS
       Exporter 5.57
       ExtUtils::MakeMaker 0
       perl 5.008
+  IPC-Signal-1.00
+    pathname: R/RO/ROSCH/IPC-Signal-1.00.tar.gz
+    provides:
+      IPC::Signal 1.00
+    requirements:
+      ExtUtils::MakeMaker 0
   LWP-MediaTypes-6.04
     pathname: O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz
     provides:
@@ -214,6 +246,29 @@ DISTRIBUTIONS
       Scalar::Util 0
       perl 5.006002
       strict 0
+  List-MoreUtils-0.430
+    pathname: R/RE/REHSACK/List-MoreUtils-0.430.tar.gz
+    provides:
+      List::MoreUtils 0.430
+      List::MoreUtils::PP 0.430
+    requirements:
+      Exporter::Tiny 0.038
+      ExtUtils::MakeMaker 0
+      List::MoreUtils::XS 0.430
+  List-MoreUtils-XS-0.430
+    pathname: R/RE/REHSACK/List-MoreUtils-XS-0.430.tar.gz
+    provides:
+      List::MoreUtils::XS 0.430
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Copy 0
+      File::Path 0
+      File::Spec 0
+      IPC::Cmd 0
+      XSLoader 0.22
+      base 0
   Metrics-Any-0.10
     pathname: P/PE/PEVANS/Metrics-Any-0.10.tar.gz
     provides:
@@ -290,12 +345,77 @@ DISTRIBUTIONS
       Metrics::Any 0.05
       Module::Build 0.4004
       perl 5.014
+  Parallel-Prefork-0.18
+    pathname: K/KA/KAZUHO/Parallel-Prefork-0.18.tar.gz
+    provides:
+      Parallel::Prefork 0.18
+      Parallel::Prefork::SpareWorkers undef
+      Parallel::Prefork::SpareWorkers::Scoreboard undef
+    requirements:
+      Class::Accessor::Lite 0.04
+      ExtUtils::MakeMaker 6.59
+      List::MoreUtils 0
+      Proc::Wait3 0.03
+      Scope::Guard 0
+      Signal::Mask 0
+      Test::Requires 0
+      Test::SharedFork 0
+      perl 5.008001
+  Proc-Wait3-0.05
+    pathname: C/CT/CTILMES/Proc-Wait3-0.05.tar.gz
+    provides:
+      Proc::Wait3 0.05
+    requirements:
+      ExtUtils::MakeMaker 0
+  Scope-Guard-0.21
+    pathname: C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz
+    provides:
+      Scope::Guard 0.21
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+      perl 5.006001
+  Signal-Mask-0.008
+    pathname: L/LE/LEONT/Signal-Mask-0.008.tar.gz
+    provides:
+      Signal::Mask 0.008
+      Signal::Pending 0.008
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.30
+      IPC::Signal 0
+      POSIX 0
+      strict 0
+      warnings 0
   Struct-Dumb-0.14
     pathname: P/PE/PEVANS/Struct-Dumb-0.14.tar.gz
     provides:
       Struct::Dumb 0.14
     requirements:
       Module::Build 0.4004
+  Test-Requires-0.11
+    pathname: T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz
+    provides:
+      Test::Requires 0.11
+    requirements:
+      ExtUtils::MakeMaker 6.64
+      Test::Builder::Module 0
+      Test::More 0.47
+      perl 5.006
+  Test-SharedFork-0.35
+    pathname: E/EX/EXODIST/Test-SharedFork-0.35.tar.gz
+    provides:
+      Test::SharedFork 0.35
+      Test::SharedFork::Array undef
+      Test::SharedFork::Scalar undef
+      Test::SharedFork::Store undef
+    requirements:
+      ExtUtils::MakeMaker 6.64
+      File::Temp 0
+      Test::Builder 0.32
+      Test::Builder::Module 0
+      Test::More 0.88
+      perl 5.008_001
   TimeDate-2.33
     pathname: A/AT/ATOOMIC/TimeDate-2.33.tar.gz
     provides:

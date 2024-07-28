@@ -26,7 +26,6 @@ my $server = Net::Async::HTTP::Server->new(
     }
 );
 
-
 $loop->add( $server);
 
 $server->listen(
