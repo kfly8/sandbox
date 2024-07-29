@@ -19,9 +19,9 @@ sub run {
     ) or die "Could not create server socket: $!";
 
     while ($pm->signal_received ne 'TERM') {
-      $pm->start and next;
-      accept_loop($server);
-      $pm->finish;
+      $pm->start(sub {
+        accept_loop($server);
+      });
     }
 
     my $timeout = 10;
@@ -34,22 +34,24 @@ my $response = "HTTP/1.0 200 OK\r\nContent-Length: 11\r\n\r\nHello World\n";
 
 sub accept_loop ($server) {
     while (1) {
+        warn "[$$] start accept";
         my $conn = $server->accept();
         next unless $conn;
 
-        $conn->autoflush(1);
+        warn "[$$] accepted";
+
         my $request;
         while (<$conn>) {
             last if /^[\r\n]+$/;
             $request .= $_;
         }
 
-        warn $$;
-        warn $request;
-
         print $conn $response;
 
+        warn "[$$] write response";
+
         $conn->close;
+        warn "[$$] connection closed";
     }
 }
 
