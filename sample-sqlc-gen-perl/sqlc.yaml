@@ -1,0 +1,14 @@
+version: '2'
+plugins:
+- name: perl
+  wasm:
+    url: file:///Users/kfly8/src/github.com/kfly8/sqlc-gen-perl/bin/sqlc-gen-perl.wasm
+    sha256: ""
+sql:
+- schema: schema.sql
+  queries: query.sql
+  engine: postgresql
+  codegen:
+  - plugin: perl
+    out: db
+
