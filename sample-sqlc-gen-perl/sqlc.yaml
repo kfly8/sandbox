@@ -12,6 +12,7 @@ sql:
   - plugin: perl
     out: 'lib/My'
     options:
-      model_package: 'My::Models'
+      models_package: 'My::Models'
+      querier_package: 'My::Querier'
 
 
