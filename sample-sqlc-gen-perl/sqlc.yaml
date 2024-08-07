@@ -10,5 +10,8 @@ sql:
   engine: postgresql
   codegen:
   - plugin: perl
-    out: db
+    out: 'lib/My'
+    options:
+      model_package: 'My::Models'
+
 
