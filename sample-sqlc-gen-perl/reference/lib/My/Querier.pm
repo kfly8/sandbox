@@ -5,8 +5,9 @@ use warnings;
 our @EXPORT_OK;
 push @EXPORT_OK => qw(CreateAuthor DeleteAuthor GetAuthor ListAuthors);
 
-use Syntax::Keyword::Assert;
-use Types::Standard -types;
+use SQLC qw(__exec __one __many);
+use SQLC::Types qw(ArrayRef Dict String Text);
+use SQLC::Assert qw(assert);
 
 use My::Models qw(Author);
 
@@ -19,14 +20,15 @@ INSERT INTO authors (
 };
 
 use kura CreateAuthorParams => Dict[
-    name => Str,
-    bio => Str,
+    name => String,
+    bio => Text,
 ];
 
-sub CreateAuthor($db, $arg) {
-    assert { CreateAuthorParams->check($arg); };
+sub CreateAuthor {
+    my ($dbh, $arg) = @_;
 
-    my $err = $db->exec(createAuthor, $arg->{name}, $arg->{bio});
+    assert { CreateAuthorParams->check($arg); };
+    my $err = __exec($dbh, createAuthor, $arg->{name}, $arg->{bio});
     return $err;
 }
 
@@ -35,8 +37,11 @@ DELETE FROM authors
 WHERE id = ?
 };
 
-sub DeleteAuthor($db, $id) {
-    my $err = $db->exec(deleteAuthor, $id);
+sub DeleteAuthor {
+    my ($dbh, $id) = @_;
+
+    assert { Int->check($id) };
+    my $err = __exec($dbh, deleteAuthor, $id);
     return $err;
 }
 
@@ -45,8 +50,11 @@ SELECT id, name, bio FROM authors
 WHERE id = ? LIMIT 1
 };
 
-sub GetAuthor($db, $id) {
-    my $row = $db->select_row(getAuthor, $id);
+sub GetAuthor {
+    my ($dbh, $id) = @_;
+
+    assert { Int->check($id) };
+    my $row = __one($dbh, getAuthor, $id);
     assert { Author->check($row) };
     return $row;
 }
@@ -56,8 +64,10 @@ SELECT id, name, bio FROM authors
 ORDER BY name
 };
 
-sub ListAuthors($db) {
-    my $rows = $db->select_all(listAuthors);
+sub ListAuthors {
+    my ($dbh) = @_;
+
+    my $rows = __many($dbh, listAuthors);
     assert { (ArrayRef[Author])->check($rows) };
     return $rows;
 }
