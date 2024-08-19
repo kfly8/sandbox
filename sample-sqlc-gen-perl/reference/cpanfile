@@ -1,0 +1,6 @@
+requires 'DBI';
+requires 'Type::Tiny';
+requires 'kura';
+requires 'Syntax::Keyword::Assert';
+
+requires 'DBD::SQLite';
