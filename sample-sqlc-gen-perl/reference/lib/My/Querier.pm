@@ -5,9 +5,9 @@ use warnings;
 our @EXPORT_OK;
 push @EXPORT_OK => qw(CreateAuthor DeleteAuthor GetAuthor ListAuthors);
 
-use SQLC qw(__exec __one __many);
-use SQLC::Types qw(ArrayRef Dict String Text);
-use SQLC::Assert qw(assert);
+use Carp;
+use Syntax::Keyword::Assert;
+use Types::Standard -types;
 
 use My::Models qw(Author);
 
@@ -20,16 +20,18 @@ INSERT INTO authors (
 };
 
 use kura CreateAuthorParams => Dict[
-    name => String,
-    bio => Text,
+    name => Str,
+    bio => Str,
 ];
 
 sub CreateAuthor {
     my ($dbh, $arg) = @_;
-
     assert { CreateAuthorParams->check($arg); };
-    my $err = __exec($dbh, createAuthor, $arg->{name}, $arg->{bio});
-    return $err;
+
+    my $sth = $dbh->prepare(createAuthor);
+    my @bind = ($arg->{name}, $arg->{bio});
+    my $ret = $sth->execute(@bind) or croak $sth->errstr;
+    return $ret;
 }
 
 use constant deleteAuthor => q{-- name: DeleteAuthor :exec
@@ -39,10 +41,12 @@ WHERE id = ?
 
 sub DeleteAuthor {
     my ($dbh, $id) = @_;
-
     assert { Int->check($id) };
-    my $err = __exec($dbh, deleteAuthor, $id);
-    return $err;
+
+    my $sth = $dbh->prepare(deleteAuthor);
+    my @bind = ($id);
+    my $ret = $sth->execute(@bind) or croak $sth->errstr;
+    return $ret;
 }
 
 use constant getAuthor => q{-- name: GetAuthor :one
@@ -52,9 +56,15 @@ WHERE id = ? LIMIT 1
 
 sub GetAuthor {
     my ($dbh, $id) = @_;
-
     assert { Int->check($id) };
-    my $row = __one($dbh, getAuthor, $id);
+
+    my $sth = $dbh->prepare(getAuthor);
+    my @bind = ($id);
+    my $ret = $sth->execute(@bind) or croak $sth->errstr;
+
+    my $row = $ret && $sth->fetchrow_hashref;
+    return unless $row;
+
     assert { Author->check($row) };
     return $row;
 }
@@ -67,7 +77,11 @@ ORDER BY name
 sub ListAuthors {
     my ($dbh) = @_;
 
-    my $rows = __many($dbh, listAuthors);
+    my $sth = $dbh->prepare(listAuthors);
+    my $ret = $sth->execute() or croak $sth->errstr;
+
+    my $rows = $ret && $sth->fetchall_arrayref({});
+
     assert { (ArrayRef[Author])->check($rows) };
     return $rows;
 }

@@ -2,12 +2,12 @@ package My::Models;
 use strict;
 use warnings;
 
-use SQLC::Types qw(Dict String Int Text);
+use Types::Standard -types;
 
 use kura Author => Dict[
   id => Int,
-  name => String,
-  bio => Text,
+  name => Str,
+  bio => Str,
 ];
 
 1;
