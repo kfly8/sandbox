@@ -224,10 +224,10 @@ DISTRIBUTIONS
       Text::ParseWords 0
       perl 5.006001
       version 0.87
-  Syntax-Keyword-Assert-0.11
-    pathname: K/KF/KFLY/Syntax-Keyword-Assert-0.11.tar.gz
+  Syntax-Keyword-Assert-0.12
+    pathname: K/KF/KFLY/Syntax-Keyword-Assert-0.12.tar.gz
     provides:
-      Syntax::Keyword::Assert 0.11
+      Syntax::Keyword::Assert 0.12
     requirements:
       Devel::StrictMode 0.003
       ExtUtils::CBuilder 0
@@ -306,10 +306,10 @@ DISTRIBUTIONS
       File::ShareDir 1.00
       Module::Build 0.4004
       perl 5.014
-  kura-0.02
-    pathname: K/KF/KFLY/kura-0.02.tar.gz
+  kura-0.03
+    pathname: K/KF/KFLY/kura-0.03.tar.gz
     provides:
-      kura 0.02
+      kura 0.03
     requirements:
       Module::Build::Tiny 0.035
       Sub::Util 1.40

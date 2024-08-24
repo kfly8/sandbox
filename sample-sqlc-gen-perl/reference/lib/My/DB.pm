@@ -1,16 +1,28 @@
-package My::Querier;
+package My::DB;
 use strict;
 use warnings;
+use utf8;
 
 our @EXPORT_OK;
-push @EXPORT_OK => qw(CreateAuthor DeleteAuthor GetAuthor ListAuthors);
+push @EXPORT_OK => qw(
+    CreateAuthor
+    DeleteAuthor
+    GetAuthor
+    ListAuthors
+);
 
 use Carp;
 use Syntax::Keyword::Assert;
 use Types::Standard -types;
 
-use My::Models qw(Author);
+# Define Models
+use kura Author => Dict[
+  id => Int,
+  name => Str,
+  bio => Str,
+];
 
+# Define Queries
 use constant createAuthor => q{-- name: CreateAuthor :exec
 INSERT INTO authors (
   name, bio
