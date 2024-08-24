@@ -1,0 +1,7 @@
+version: '3.0'
+
+services:
+  test:
+    image: perl:5.40.0-threaded
+    stdin_open: true
+    tty: true
