@@ -38,3 +38,9 @@ warn Dumper $authors;
 
 my $author = $q->GetAuthor($authors->[0]{id});
 warn Dumper $author;
+
+my $count = $q->CountAuthors();
+warn Dumper $count;
+
+my $hoge = $q->CountAuthorsByName();
+warn Dumper $hoge;

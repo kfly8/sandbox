@@ -98,4 +98,44 @@ sub ListAuthors {
     return $rows;
 }
 
+use constant countAuthors => q{-- name: CountAuthors :one
+SELECT count(*) FROM authors
+};
+
+sub CountAuthors {
+    my ($self) = @_;
+
+    my $sth = $self->dbh->prepare(countAuthors);
+    my $ret = $sth->execute() or croak $sth->errstr;
+
+    my $row = $ret && $sth->fetchrow_arrayref;
+    return unless $row;
+
+    assert { Int->check($row->[0]) };
+    return $row->[0];
+}
+
+use constant countAuthorsByName => q{-- name: CountAuthorsByName :many
+SELECT name , count(*) AS count FROM authors
+GROUP BY name
+ORDER BY count
+};
+
+use kura CountAuthorsByNameRow => Dict[
+    name => Str,
+    count => Int,
+];
+
+sub CountAuthorsByName {
+    my ($self) = @_;
+
+    my $sth = $self->dbh->prepare(countAuthorsByName);
+    my $ret = $sth->execute() or croak $sth->errstr;
+
+    my $rows = $ret && $sth->fetchall_arrayref({});
+
+    assert { (ArrayRef[CountAuthorsByNameRow])->check($rows) };
+    return $rows;
+}
+
 1;
