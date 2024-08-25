@@ -17,17 +17,24 @@ my $dbh = DBI->connect('dbi:SQLite:dbname=sample.db', '', '', {
 # });
 
 
-use My::DB qw(
-    CreateAuthor
-    ListAuthors
-);
+use My::DB;
 
-CreateAuthor($dbh, {
+my $q = My::DB->new($dbh);
+
+$q->CreateAuthor({
     name => 'John Doe',
     bio => 'A mysterious',
 });
 
-my $authors = ListAuthors($dbh);
+my $authors = $q->ListAuthors();
 
 use Data::Dumper;
 warn Dumper $authors;
+
+$q->DeleteAuthor($authors->[0]{id});
+
+$authors = $q->ListAuthors();
+warn Dumper $authors;
+
+my $author = $q->GetAuthor($authors->[0]{id});
+warn Dumper $author;

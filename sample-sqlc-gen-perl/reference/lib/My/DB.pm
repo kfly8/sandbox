@@ -3,17 +3,17 @@ use strict;
 use warnings;
 use utf8;
 
-our @EXPORT_OK;
-push @EXPORT_OK => qw(
-    CreateAuthor
-    DeleteAuthor
-    GetAuthor
-    ListAuthors
-);
-
 use Carp;
 use Syntax::Keyword::Assert;
 use Types::Standard -types;
+
+sub new {
+    my ($class, $dbh) = @_;
+    assert { (InstanceOf['DBI::db'])->check($dbh) };
+    bless [$dbh], $class;
+}
+
+sub dbh { $_[0][0] }
 
 # Define Models
 use kura Author => Dict[
@@ -37,10 +37,10 @@ use kura CreateAuthorParams => Dict[
 ];
 
 sub CreateAuthor {
-    my ($dbh, $arg) = @_;
-    assert { CreateAuthorParams->check($arg); };
+    my ($self, $arg) = @_;
+    assert { CreateAuthorParams->check($arg) };
 
-    my $sth = $dbh->prepare(createAuthor);
+    my $sth = $self->dbh->prepare(createAuthor);
     my @bind = ($arg->{name}, $arg->{bio});
     my $ret = $sth->execute(@bind) or croak $sth->errstr;
     return $ret;
@@ -52,10 +52,10 @@ WHERE id = ?
 };
 
 sub DeleteAuthor {
-    my ($dbh, $id) = @_;
+    my ($self, $id) = @_;
     assert { Int->check($id) };
 
-    my $sth = $dbh->prepare(deleteAuthor);
+    my $sth = $self->dbh->prepare(deleteAuthor);
     my @bind = ($id);
     my $ret = $sth->execute(@bind) or croak $sth->errstr;
     return $ret;
@@ -67,10 +67,10 @@ WHERE id = ? LIMIT 1
 };
 
 sub GetAuthor {
-    my ($dbh, $id) = @_;
+    my ($self, $id) = @_;
     assert { Int->check($id) };
 
-    my $sth = $dbh->prepare(getAuthor);
+    my $sth = $self->dbh->prepare(getAuthor);
     my @bind = ($id);
     my $ret = $sth->execute(@bind) or croak $sth->errstr;
 
@@ -87,9 +87,9 @@ ORDER BY name
 };
 
 sub ListAuthors {
-    my ($dbh) = @_;
+    my ($self) = @_;
 
-    my $sth = $dbh->prepare(listAuthors);
+    my $sth = $self->dbh->prepare(listAuthors);
     my $ret = $sth->execute() or croak $sth->errstr;
 
     my $rows = $ret && $sth->fetchall_arrayref({});
